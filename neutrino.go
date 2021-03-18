@@ -27,7 +27,7 @@ import (
 	"github.com/John-Tonny/vclsuite_vcld/peer"
 	"github.com/John-Tonny/vclsuite_vcld/wire"
 	vclutil "github.com/John-Tonny/vclsuite_vclutil"
-	"github.com/John-Tonny/vclsuite_vclwallet/walletdb.
+	"github.com/John-Tonny/vclsuite_vclwallet/walletdb"
 )
 
 // These are exported variables so they can be changed by users.
