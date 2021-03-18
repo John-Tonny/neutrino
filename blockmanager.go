@@ -12,20 +12,20 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/txscript"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/gcs"
-	"github.com/btcsuite/btcutil/gcs/builder"
-	"github.com/lightninglabs/neutrino/banman"
-	"github.com/lightninglabs/neutrino/blockntfns"
-	"github.com/lightninglabs/neutrino/chainsync"
-	"github.com/lightninglabs/neutrino/headerfs"
-	"github.com/lightninglabs/neutrino/headerlist"
-	"github.com/lightninglabs/neutrino/query"
+	"github.com/John-Tonny/neutrino/banman"
+	"github.com/John-Tonny/neutrino/blockntfns"
+	"github.com/John-Tonny/neutrino/chainsync"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/neutrino/headerlist"
+	"github.com/John-Tonny/neutrino/query"
+	"github.com/John-Tonny/vclsuite_vcld/blockchain"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/txscript"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	vclutil "github.com/John-Tonny/vclsuite_vclutil"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs/builder"
 )
 
 const (
@@ -95,7 +95,7 @@ type donePeerMsg struct {
 // txMsg packages a bitcoin tx message and the peer it came from together
 // so the block handler has access to that information.
 type txMsg struct {
-	tx   *btcutil.Tx
+	tx   *vclutil.Tx
 	peer *ServerPeer
 }
 
@@ -124,7 +124,7 @@ type blockManagerCfg struct {
 	BanPeer func(addr string, reason banman.Reason) error
 
 	// GetBlock fetches a block from the p2p network.
-	GetBlock func(chainhash.Hash, ...QueryOption) (*btcutil.Block, error)
+	GetBlock func(chainhash.Hash, ...QueryOption) (*vclutil.Block, error)
 
 	// firstPeerSignal is a channel that's sent upon once the main daemon
 	// has made its first peer connection. We use this to ensure we don't
@@ -2805,7 +2805,7 @@ func (b *blockManager) checkHeaderSanity(blockHeader *wire.BlockHeader,
 	if err != nil {
 		return err
 	}
-	stubBlock := btcutil.NewBlock(&wire.MsgBlock{
+	stubBlock := vclutil.NewBlock(&wire.MsgBlock{
 		Header: *blockHeader,
 	})
 	err = blockchain.CheckProofOfWork(stubBlock,

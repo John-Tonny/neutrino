@@ -12,22 +12,22 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/btcsuite/btcd/addrmgr"
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/connmgr"
-	"github.com/btcsuite/btcd/peer"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcwallet/walletdb"
-	"github.com/lightninglabs/neutrino/banman"
-	"github.com/lightninglabs/neutrino/blockntfns"
-	"github.com/lightninglabs/neutrino/cache/lru"
-	"github.com/lightninglabs/neutrino/filterdb"
-	"github.com/lightninglabs/neutrino/headerfs"
-	"github.com/lightninglabs/neutrino/pushtx"
-	"github.com/lightninglabs/neutrino/query"
+	"github.com/John-Tonny/neutrino/banman"
+	"github.com/John-Tonny/neutrino/blockntfns"
+	"github.com/John-Tonny/neutrino/cache/lru"
+	"github.com/John-Tonny/neutrino/filterdb"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/neutrino/pushtx"
+	"github.com/John-Tonny/neutrino/query"
+	"github.com/John-Tonny/vclsuite_vcld/addrmgr"
+	"github.com/John-Tonny/vclsuite_vcld/blockchain"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/connmgr"
+	"github.com/John-Tonny/vclsuite_vcld/peer"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	vclutil "github.com/John-Tonny/vclsuite_vclutil"
+	"github.com/John-Tonny/vclsuite_vclwallet/walletdb.
 )
 
 // These are exported variables so they can be changed by users.
@@ -345,9 +345,9 @@ func (sp *ServerPeer) OnHeaders(p *peer.Peer, msg *wire.MsgHeaders) {
 // disconnected if an invalid fee filter value is provided.
 func (sp *ServerPeer) OnFeeFilter(_ *peer.Peer, msg *wire.MsgFeeFilter) {
 	// Check that the passed minimum fee is a valid amount.
-	if msg.MinFee < 0 || msg.MinFee > btcutil.MaxSatoshi {
+	if msg.MinFee < 0 || msg.MinFee > vclutil.MaxSatoshi {
 		log.Debugf("Peer %v sent an invalid feefilter '%v' -- "+
-			"disconnecting", sp, btcutil.Amount(msg.MinFee))
+			"disconnecting", sp, vclutil.Amount(msg.MinFee))
 		sp.Disconnect()
 		return
 	}

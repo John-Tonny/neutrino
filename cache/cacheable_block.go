@@ -1,11 +1,11 @@
 package cache
 
-import "github.com/btcsuite/btcutil"
+import vclutil "github.com/John-Tonny/vclsuite_vclutil"
 
-// CacheableBlock is a wrapper around the btcutil.Block type which provides a
+// CacheableBlock is a wrapper around the vclutil.Block type which provides a
 // Size method used by the cache to target certain memory usage.
 type CacheableBlock struct {
-	*btcutil.Block
+	*vclutil.Block
 }
 
 // Size returns size of this block in bytes.

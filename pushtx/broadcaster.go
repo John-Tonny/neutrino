@@ -6,10 +6,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcwallet/wtxmgr"
-	"github.com/lightninglabs/neutrino/blockntfns"
+	"github.com/John-Tonny/neutrino/blockntfns"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	"github.com/John-Tonny/vclsuite_vclwallet/wtxmgr"
 )
 
 var (

@@ -9,16 +9,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/rpcclient"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/gcs"
-	"github.com/btcsuite/btcutil/gcs/builder"
+	"github.com/John-Tonny/neutrino/blockntfns"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/rpcclient"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	vclutil "github.com/John-Tonny/vclsuite_vclutil"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs/builder"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/lightninglabs/neutrino/blockntfns"
-	"github.com/lightninglabs/neutrino/headerfs"
 )
 
 // mockChainSource is a mock implementation of the ChainSource interface that
@@ -32,7 +32,7 @@ type mockChainSource struct {
 	blockHeightIndex      map[chainhash.Hash]uint32
 	blockHashesByHeight   map[uint32]*chainhash.Hash
 	blockHeaders          map[chainhash.Hash]*wire.BlockHeader
-	blocks                map[chainhash.Hash]*btcutil.Block
+	blocks                map[chainhash.Hash]*vclutil.Block
 	failGetFilter         bool // if true, returns nil filter in GetCFilter
 	filters               map[chainhash.Hash]*gcs.Filter
 	filterHeadersByHeight map[uint32]*chainhash.Hash
@@ -50,7 +50,7 @@ func newMockChainSource(numBlocks int) *mockChainSource {
 		blockHeightIndex:      make(map[chainhash.Hash]uint32),
 		blockHashesByHeight:   make(map[uint32]*chainhash.Hash),
 		blockHeaders:          make(map[chainhash.Hash]*wire.BlockHeader),
-		blocks:                make(map[chainhash.Hash]*btcutil.Block),
+		blocks:                make(map[chainhash.Hash]*vclutil.Block),
 		filterHeadersByHeight: make(map[uint32]*chainhash.Hash),
 		filters:               make(map[chainhash.Hash]*gcs.Filter),
 	}
@@ -61,7 +61,7 @@ func newMockChainSource(numBlocks int) *mockChainSource {
 	chain.blockHeightIndex[*genesisHash] = 0
 	chain.blockHashesByHeight[0] = genesisHash
 	chain.blockHeaders[*genesisHash] = &genesisBlock.Header
-	chain.blocks[*genesisHash] = btcutil.NewBlock(genesisBlock)
+	chain.blocks[*genesisHash] = vclutil.NewBlock(genesisBlock)
 
 	filter, _ := gcs.FromBytes(0, builder.DefaultP, builder.DefaultM, nil)
 	chain.filters[*genesisHash] = filter
@@ -115,7 +115,7 @@ func (c *mockChainSource) addNewBlockWithHeader(header *wire.BlockHeader,
 	c.blockHeightIndex[newHash] = newHeight
 	c.blockHashesByHeight[newHeight] = &newHash
 	c.blockHeaders[newHash] = header
-	c.blocks[newHash] = btcutil.NewBlock(wire.NewMsgBlock(header))
+	c.blocks[newHash] = vclutil.NewBlock(wire.NewMsgBlock(header))
 
 	newFilter, _ := gcs.FromBytes(0, builder.DefaultP, builder.DefaultM, nil)
 	c.filters[newHash] = newFilter
@@ -242,7 +242,7 @@ func (c *mockChainSource) GetBlockHeader(
 
 // GetBlock returns the block with the given hash.
 func (c *mockChainSource) GetBlock(hash chainhash.Hash,
-	_ ...QueryOption) (*btcutil.Block, error) {
+	_ ...QueryOption) (*vclutil.Block, error) {
 
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -355,7 +355,7 @@ func newRescanTestContext(t *testing.T, numBlocks int,
 	blocksDisconnected := make(chan headerfs.BlockStamp)
 	ntfnHandlers := rpcclient.NotificationHandlers{
 		OnFilteredBlockConnected: func(height int32,
-			header *wire.BlockHeader, _ []*btcutil.Tx) {
+			header *wire.BlockHeader, _ []*vclutil.Tx) {
 
 			blocksConnected <- headerfs.BlockStamp{
 				Hash:      header.BlockHash(),

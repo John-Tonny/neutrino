@@ -3,10 +3,10 @@ package neutrino
 import (
 	"fmt"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/lightninglabs/neutrino/headerfs"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/vclsuite_vcld/blockchain"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
 )
 
 // mockBlockHeaderStore is an implementation of the BlockHeaderStore backed by

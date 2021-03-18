@@ -12,17 +12,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/blockchain"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/gcs"
-	"github.com/btcsuite/btcutil/gcs/builder"
-	"github.com/lightninglabs/neutrino/cache"
-	"github.com/lightninglabs/neutrino/cache/lru"
-	"github.com/lightninglabs/neutrino/filterdb"
-	"github.com/lightninglabs/neutrino/headerfs"
+	"github.com/John-Tonny/neutrino/cache"
+	"github.com/John-Tonny/neutrino/cache/lru"
+	"github.com/John-Tonny/neutrino/filterdb"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/vclsuite_vcld/blockchain"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	vclutil "github.com/John-Tonny/vclsuite_vclutil"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs/builder"
 )
 
 var (
@@ -42,9 +42,9 @@ var (
 // loadBlocks loads the blocks contained in the testdata directory and returns
 // a slice of them.
 //
-// NOTE: copied from btcsuite/btcd/database/ffldb/interface_test.go
+// NOTE: copied from John-Tonny/vclsuite_vcld/database/ffldb/interface_test.go
 func loadBlocks(t *testing.T, dataFile string, network wire.BitcoinNet) (
-	[]*btcutil.Block, error) {
+	[]*vclutil.Block, error) {
 	// Open the file that contains the blocks for reading.
 	fi, err := os.Open(dataFile)
 	if err != nil {
@@ -60,8 +60,8 @@ func loadBlocks(t *testing.T, dataFile string, network wire.BitcoinNet) (
 	dr := bzip2.NewReader(fi)
 
 	// Set the first block as the genesis block.
-	blocks := make([]*btcutil.Block, 0, 256)
-	genesis := btcutil.NewBlock(chaincfg.MainNetParams.GenesisBlock)
+	blocks := make([]*vclutil.Block, 0, 256)
+	genesis := vclutil.NewBlock(chaincfg.MainNetParams.GenesisBlock)
 	blocks = append(blocks, genesis)
 
 	// Load the remaining blocks.
@@ -100,7 +100,7 @@ func loadBlocks(t *testing.T, dataFile string, network wire.BitcoinNet) (
 		}
 
 		// Deserialize and store the block.
-		block, err := btcutil.NewBlockFromBytes(blockBytes)
+		block, err := vclutil.NewBlockFromBytes(blockBytes)
 		if err != nil {
 			t.Errorf("Failed to parse block %v: %v", height, err)
 			return nil, err

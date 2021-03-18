@@ -1,9 +1,9 @@
 package cache
 
 import (
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcutil/gcs"
-	"github.com/lightninglabs/neutrino/filterdb"
+	"github.com/John-Tonny/neutrino/filterdb"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs"
 )
 
 // FilterCacheKey represents the key used to access filters in the FilterCache.

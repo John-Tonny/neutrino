@@ -7,15 +7,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/btcsuite/btcd/chaincfg/chainhash"
-	"github.com/btcsuite/btcd/wire"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/gcs"
-	"github.com/lightninglabs/neutrino/headerfs"
+	"github.com/John-Tonny/neutrino/headerfs"
+	"github.com/John-Tonny/vclsuite_vcld/chaincfg/chainhash"
+	"github.com/John-Tonny/vclsuite_vcld/wire"
+	vclutil "github.com/John-Tonny/vclsuite_vclutil"
+	"github.com/John-Tonny/vclsuite_vclutil/gcs"
 )
 
 type MockChainClient struct {
-	getBlockResponse     map[chainhash.Hash]*btcutil.Block
+	getBlockResponse     map[chainhash.Hash]*vclutil.Block
 	getBlockHashResponse map[int64]*chainhash.Hash
 	getBestBlockHash     *chainhash.Hash
 	getBestBlockHeight   int32
@@ -24,18 +24,18 @@ type MockChainClient struct {
 
 func NewMockChainClient() *MockChainClient {
 	return &MockChainClient{
-		getBlockResponse:     make(map[chainhash.Hash]*btcutil.Block),
+		getBlockResponse:     make(map[chainhash.Hash]*vclutil.Block),
 		getBlockHashResponse: make(map[int64]*chainhash.Hash),
 		getCFilterResponse:   make(map[chainhash.Hash]*gcs.Filter),
 	}
 }
 
-func (c *MockChainClient) SetBlock(hash *chainhash.Hash, block *btcutil.Block) {
+func (c *MockChainClient) SetBlock(hash *chainhash.Hash, block *vclutil.Block) {
 	c.getBlockResponse[*hash] = block
 }
 
 func (c *MockChainClient) GetBlockFromNetwork(blockHash chainhash.Hash,
-	options ...QueryOption) (*btcutil.Block, error) {
+	options ...QueryOption) (*vclutil.Block, error) {
 	return c.getBlockResponse[blockHash], nil
 }
 
@@ -327,11 +327,11 @@ func TestUtxoScannerScanBasic(t *testing.T) {
 
 	block99999Hash := Block99999.BlockHash()
 	mockChainClient.SetBlockHash(99999, &block99999Hash)
-	mockChainClient.SetBlock(&block99999Hash, btcutil.NewBlock(&Block99999))
+	mockChainClient.SetBlock(&block99999Hash, vclutil.NewBlock(&Block99999))
 
 	block100000Hash := Block100000.BlockHash()
 	mockChainClient.SetBlockHash(100000, &block100000Hash)
-	mockChainClient.SetBlock(&block100000Hash, btcutil.NewBlock(&Block100000))
+	mockChainClient.SetBlock(&block100000Hash, vclutil.NewBlock(&Block100000))
 	mockChainClient.SetBestSnapshot(&block100000Hash, 100000)
 
 	scanner := NewUtxoScanner(&UtxoScannerConfig{
@@ -383,12 +383,12 @@ func TestUtxoScannerScanAddBlocks(t *testing.T) {
 
 	block99999Hash := Block99999.BlockHash()
 	mockChainClient.SetBlockHash(99999, &block99999Hash)
-	mockChainClient.SetBlock(&block99999Hash, btcutil.NewBlock(&Block99999))
+	mockChainClient.SetBlock(&block99999Hash, vclutil.NewBlock(&Block99999))
 	mockChainClient.SetBestSnapshot(&block99999Hash, 99999)
 
 	block100000Hash := Block100000.BlockHash()
 	mockChainClient.SetBlockHash(100000, &block100000Hash)
-	mockChainClient.SetBlock(&block100000Hash, btcutil.NewBlock(&Block100000))
+	mockChainClient.SetBlock(&block100000Hash, vclutil.NewBlock(&Block100000))
 
 	var snapshotLock sync.Mutex
 	waitForSnapshot := make(chan struct{})
@@ -464,7 +464,7 @@ func TestUtxoScannerCancelRequest(t *testing.T) {
 
 	block100000Hash := Block100000.BlockHash()
 	mockChainClient.SetBlockHash(100000, &block100000Hash)
-	mockChainClient.SetBlock(&block100000Hash, btcutil.NewBlock(&Block100000))
+	mockChainClient.SetBlock(&block100000Hash, vclutil.NewBlock(&Block100000))
 	mockChainClient.SetBestSnapshot(&block100000Hash, 100000)
 
 	fetchErr := errors.New("cannot fetch block")
@@ -475,7 +475,7 @@ func TestUtxoScannerCancelRequest(t *testing.T) {
 	block := make(chan struct{})
 	scanner := NewUtxoScanner(&UtxoScannerConfig{
 		GetBlock: func(chainhash.Hash, ...QueryOption,
-		) (*btcutil.Block, error) {
+		) (*vclutil.Block, error) {
 			<-block
 			return nil, fetchErr
 		},
@@ -642,7 +642,7 @@ var Block99999 = wire.MsgBlock{
 	},
 }
 
-// The following is taken from the btcsuite/btcutil project.
+// The following is taken from the John-Tonny/vclsuite_vclutil project.
 // Block100000 defines block 100,000 of the block chain.  It is used to test
 // Block operations.
 var Block100000 = wire.MsgBlock{
